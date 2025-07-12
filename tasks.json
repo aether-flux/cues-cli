@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "project_id": 1,
+    "title": "tasktest",
+    "desc": null,
+    "due": null,
+    "priority": "High",
+    "is_done": false,
+    "created_at": "now"
+  },
+  {
+    "id": 2,
+    "project_id": 1,
+    "title": "rustlings",
+    "desc": null,
+    "due": "tomorrow 16:00",
+    "priority": null,
+    "is_done": false,
+    "created_at": "now"
+  },
+  {
+    "id": 3,
+    "project_id": 1,
+    "title": "rust types",
+    "desc": "learn rust type safety",
+    "due": "tomorrow 16:00",
+    "priority": "Low",
+    "is_done": false,
+    "created_at": "now"
+  }
+]
