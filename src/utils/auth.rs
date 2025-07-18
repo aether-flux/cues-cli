@@ -33,7 +33,9 @@ pub async fn refresh_access_token (r: &str) -> Result<String, Box<dyn std::error
 
     // Extracting data from response
     if let Some(t) = res.get("accessToken") {
-        return Ok(t.to_string());
+        // println!("New token in helper: {}", t);
+        let token = t.as_str().unwrap_or("").trim_matches('"');
+        return Ok(token.to_string());
     } else {
         println!();
         log_err(res);

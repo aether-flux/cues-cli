@@ -18,7 +18,7 @@ use crate::utils::auth::AuthStore;
 async fn handle_use (pid: u32, auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(mut config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -36,9 +36,10 @@ async fn handle_use (pid: u32, auth_store: &AuthStore) -> Result<(), Box<dyn err
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
-            auth_store.access.set_password(&new_token);
-            let token = new_token;
+            let new_token_res: String = refresh_access_token(&refresh_token).await?;
+
+            auth_store.access.set_password(&new_token_res)?;
+            token = new_token_res;
         }
 
         // API call
@@ -93,7 +94,7 @@ async fn handle_cwp (auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>
 async fn handle_new_project (name: String, auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -111,9 +112,10 @@ async fn handle_new_project (name: String, auth_store: &AuthStore) -> Result<(),
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
-            auth_store.access.set_password(&new_token);
-            let token = new_token;
+            let new_token_res: String = refresh_access_token(&refresh_token).await?;
+
+            auth_store.access.set_password(&new_token_res)?;
+            token = new_token_res;
         }
 
         let payload = json!({
@@ -147,7 +149,7 @@ async fn handle_new_project (name: String, auth_store: &AuthStore) -> Result<(),
 async fn handle_list_projects (auth_store: &AuthStore) -> Result<(), Box<dyn std::error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -165,9 +167,10 @@ async fn handle_list_projects (auth_store: &AuthStore) -> Result<(), Box<dyn std
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
-            auth_store.access.set_password(&new_token);
-            let token = new_token;
+            let new_token_res: String = refresh_access_token(&refresh_token).await?;
+
+            auth_store.access.set_password(&new_token_res)?;
+            token = new_token_res;
         }
 
         // API call
@@ -210,7 +213,7 @@ async fn handle_task_add (title: String, desc: Option<String>, due: Option<Strin
 
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -228,9 +231,10 @@ async fn handle_task_add (title: String, desc: Option<String>, due: Option<Strin
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
-            auth_store.access.set_password(&new_token);
-            let token = new_token;
+            let new_token_res: String = refresh_access_token(&refresh_token).await?;
+
+            auth_store.access.set_password(&new_token_res)?;
+            token = new_token_res;
         }
 
         // Building payload one-by-one based on data provided by user
@@ -275,7 +279,7 @@ async fn handle_task_add (title: String, desc: Option<String>, due: Option<Strin
 async fn handle_list_tasks (all: bool, auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -293,9 +297,10 @@ async fn handle_list_tasks (all: bool, auth_store: &AuthStore) -> Result<(), Box
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
+            let new_token: String = refresh_access_token(&refresh_token).await?;
+
             auth_store.access.set_password(&new_token);
-            let token = new_token;
+            token = new_token;
         }
 
         let pid = config.current_project_id;  // Get current project id from config
@@ -400,7 +405,7 @@ async fn handle_list_tasks (all: bool, auth_store: &AuthStore) -> Result<(), Box
 async fn handle_task_done (id: u32, auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -419,8 +424,9 @@ async fn handle_task_done (id: u32, auth_store: &AuthStore) -> Result<(), Box<dy
             };
 
             let new_token = refresh_access_token(&refresh_token).await?;
+
             auth_store.access.set_password(&new_token);
-            let token = new_token;
+            token = new_token;
         }
 
         let payload = json!({
@@ -453,7 +459,7 @@ async fn handle_task_done (id: u32, auth_store: &AuthStore) -> Result<(), Box<dy
 async fn handle_task_edit (id: u32, title: Option<String>, desc: Option<String>, priority: Option<PriorityType>, due: Option<String>, done: Option<bool>, auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -472,8 +478,9 @@ async fn handle_task_edit (id: u32, title: Option<String>, desc: Option<String>,
             };
 
             let new_token = refresh_access_token(&refresh_token).await?;
+
             auth_store.access.set_password(&new_token);
-            let token = new_token;
+            token = new_token;
         }
 
         // Parse given format ("today 16:00" or "friday 4:00" etc) to a valid datetime format
@@ -539,7 +546,7 @@ async fn handle_task_edit (id: u32, title: Option<String>, desc: Option<String>,
 async fn handle_task_delete (id: u32, auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -557,9 +564,10 @@ async fn handle_task_delete (id: u32, auth_store: &AuthStore) -> Result<(), Box<
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
-            auth_store.access.set_password(&new_token);
-            let token = new_token;
+            let new_token_res: String = refresh_access_token(&refresh_token).await?;
+
+            auth_store.access.set_password(&new_token_res)?;
+            token = new_token_res;
         }
 
         // API call
@@ -588,7 +596,7 @@ async fn handle_task_delete (id: u32, auth_store: &AuthStore) -> Result<(), Box<
 async fn whoami (auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
     if let Some(config) = load_config() {
         // Get token from keyring
-        let token = match auth_store.access.get_password() {
+        let mut token: String = match auth_store.access.get_password() {
             Ok(t) => t,
             Err(_) => {
                 println!("\n{} You may not be logged in. Run {}", " ".red(), "cues login".yellow());
@@ -606,9 +614,10 @@ async fn whoami (auth_store: &AuthStore) -> Result<(), Box<dyn error::Error>> {
                 }
             };
 
-            let new_token = refresh_access_token(&refresh_token).await?;
-            auth_store.access.set_password(&new_token);
-            let token = new_token;
+            let new_token_res: String = refresh_access_token(&refresh_token).await?;
+
+            auth_store.access.set_password(&new_token_res)?;
+            token = new_token_res;
         }
 
         // API call
