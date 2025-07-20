@@ -1,1 +1,13 @@
-/target
+target/debug
+
+target/x86_64-pc-windows-gnu/release/.fingerprint
+target/x86_64-pc-windows-gnu/release/build
+target/x86_64-pc-windows-gnu/release/deps
+target/x86_64-pc-windows-gnu/release/examples
+target/x86_64-pc-windows-gnu/release/incremental
+
+target/release/.fingerprint
+target/release/build
+target/release/deps
+target/release/examples
+target/release/incremental

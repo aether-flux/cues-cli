@@ -2,7 +2,8 @@ use reqwest::{header::{USER_AGENT, HeaderMap, HeaderValue}, Client};
 use serde_json::Value;
 
 // Base URL for backend API
-const BASE_URL: &str = "https://cues-backend-production.up.railway.app/api";
+// const BASE_URL: &str = "https://cues-backend-production.up.railway.app/api";
+const BASE_URL: &str = "http://localhost:5000/api";
 
 // SECTION - Project Management
 

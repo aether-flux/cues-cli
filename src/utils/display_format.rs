@@ -113,6 +113,10 @@ fn ordinal_suffix(n: u32) -> &'static str {
 
 // Normalize date format
 pub fn format_pretty_date (input: &str) -> Result<String, ParseError> {
+    if input.trim().is_empty() {
+        return Ok("No due date".to_string());
+    }
+
     let dt_utc: DateTime<chrono::FixedOffset> = input.parse()?;
     let dt: DateTime<Local> = dt_utc.with_timezone(&Local);
 

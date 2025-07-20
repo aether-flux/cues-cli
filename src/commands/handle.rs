@@ -356,6 +356,7 @@ async fn handle_list_tasks (all: bool, auth_store: &AuthStore) -> Result<(), Box
                         println!("{} {}\n", " ".bold().yellow(), project.name.bold().yellow());
 
                         for task in proj_tasks {
+                            // println!("Task: {:#?}", &task);
                             print_task(task, false);
                         }
 
@@ -390,7 +391,7 @@ async fn handle_list_tasks (all: bool, auth_store: &AuthStore) -> Result<(), Box
                 println!("\n{} Available tasks:\n", " ".green());
 
                 for task in tasks.iter().filter(|t| t.project_id == pid) {
-                    print_task(task, false);
+                    print_task(&task, false);
                 }
             }
         }
